@@ -99,13 +99,38 @@ class StackCommand {
 				stack.cons(z.i2a(num1+num2));
 			}
 	};
+	print_list(l : List) : Object {
+      		(let io: IO <- (new IO) in 
+			if l.isNil() then io.out_string("\n")
+		        else {
+				   io.out_string(l.head());
+				   io.out_string("\n");
+				   print_list(l.tail());
+				}
+	      		fi
+		)
+
+		
+	};
+
+	display(stack : List): Object{
+		(let copy_stack: List <- stack, io : IO <- (new IO) in 
+			while (not copy_stack.isNil()) loop
+			    {
+			       print_list(copy_stack);
+			       copy_stack <- copy_stack.tail();
+			    }
+			 pool
+		)
+	};
 	
 	evaluate (stack : List):List{
 		(let top_element: String <- stack.head() in 
 			if top_element = "+" then addition(stack.tail())
 			else if top_element = "s" then s(stack.tail())
+			else if top_element = "d" then {display(stack.tail()); stack.tail();}
 			else stack.tail()
-			fi fi	
+			fi fi fi
 
 		)
 	};
@@ -116,9 +141,30 @@ class StackCommand {
 
 class Main inherits IO {
 
-   main() : Object {
+   input : String;
+   stack : List;
 
-      out_string("Nothing implemented\n")
+   main() : Object {
+      {
+        out_string("Starting loop\n");
+	out_string(">");
+	stack <- new List;
+	input <- in_string();
+	stack.cons(input);
+	out_string(input);
+	out_string("\n");
+	while (not input = "x") loop
+		{
+			out_string(">");
+			input <- in_string();
+			stack.cons(input);
+			out_string(input);
+			out_string("\n");
+		}
+	pool;
+      }
+
+
    };
 
 };
