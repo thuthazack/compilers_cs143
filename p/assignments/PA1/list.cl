@@ -1,12 +1,27 @@
 (*
- *  CS164 Fall 94
+ *  This file shows how to implement a list data type for lists of integers.
+ *  It makes use of INHERITANCE and DYNAMIC DISPATCH.
  *
- *  Programming Assignment 1
- *    Implementation of a simple stack machine.
- *	question 1 when do we actually put semi colon? ||| question 2 how do we actually evaluate or write the expression in if statements?
- *  Skeleton file
- * Cons is basically list which can be used like  astack/ but the problem is that the data typees are different
+ *  The List class has 4 operations defined on List objects. If 'l' is
+ *  a list, then the methods dispatched on 'l' have the following effects:
+ *
+ *    isNil() : Bool		Returns true if 'l' is empty, false otherwise.
+ *    head()  : Int		Returns the integer at the head of 'l'.
+ *				If 'l' is empty, execution aborts.
+ *    tail()  : List		Returns the remainder of the 'l',
+ *				i.e. without the first element.
+ *    cons(i : Int) : List	Return a new list containing i as the
+ *				first element, followed by the
+ *				elements in 'l'.
+ *
+ *  There are 2 kinds of lists, the empty list and a non-empty
+ *  list. We can think of the non-empty list as a specialization of
+ *  the empty list.
+ *  The class List defines the operations on empty list. The class
+ *  Cons inherits from List and redefines things to handle non-empty
+ *  lists.
  *)
+
 
 class List {
    -- Define operations on empty lists.
@@ -17,7 +32,7 @@ class List {
    -- Int, we need to have an Int as the result of the method body,
    -- even though abort() never returns.
 
-   head()  : String { { abort(); ""; } };
+   head()  : Int { { abort(); 0; } };
 
    -- As for head(), the self is just to make sure the return type of
    -- tail() is correct.
@@ -31,7 +46,7 @@ class List {
    -- conforms to the return type List, because Cons is a subclass of
    -- List.
 
-   cons(i : String) : List {
+   cons(i : Int) : List {
       (new Cons).init(i, self)
    };
 
@@ -54,17 +69,17 @@ class List {
 
 class Cons inherits List {
 
-   car : String;	-- The element in this list cell
+   car : Int;	-- The element in this list cell
 
    cdr : List;	-- The rest of the list
 
    isNil() : Bool { false };
 
-   head()  : String { car };
+   head()  : Int { car };
 
    tail()  : List { cdr };
 
-   init(i : String, rest : List) : List {
+   init(i : Int, rest : List) : List {
       {
 	 car <- i;
 	 cdr <- rest;
@@ -75,50 +90,3 @@ class Cons inherits List {
 };
 
 
-
-class StackCommand {
-	s (stack: List): List{
-		let top_element: String, second_element: String in {
-			top_element <- stack.head();
-			stack <- stack.tail();
-			second_element <- stack.head();
-			stack <- stack.tail();
-			
-			stack.cons(top_element).cons(second_element);
-		}
-	};
-
-
-
-	addition(stack:  List): List {
-			let num1 : Int, num2: Int, z: A2I <- new A2I in {
-				num1 <- z.a2i(stack.head());
-				stack <- stack.tail();
-				num2 <- z.a2i(stack.head());
-				stack <- stack.tail();
-				stack.cons(z.i2a(num1+num2));
-			}
-	};
-	
-	evaluate (stack : List):List{
-		(let top_element: String <- stack.head() in 
-			if top_element = "+" then addition(stack.tail())
-			else if top_element = "s" then s(stack.tail())
-			else stack.tail()
-			fi fi	
-
-		)
-	};
-
-
-};
-
-
-class Main inherits IO {
-
-   main() : Object {
-
-      out_string("Nothing implemented\n")
-   };
-
-};

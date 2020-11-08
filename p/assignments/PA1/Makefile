@@ -14,7 +14,7 @@ CFLAGS=-g
 compile: stack.s
 
 stack.s: stack.cl atoi.cl
-	${CLASSDIR}/bin/coolc stack.cl atoi.cl 
+	${CLASSDIR}/bin/coolc stack.cl atoi.cl
 
 test:	compile
 	@echo stack.test
