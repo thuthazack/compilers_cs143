@@ -143,9 +143,11 @@ class Main inherits IO {
 
    input : String;
    stack : List;
+   command : StackCommand;
 
    main() : Object {
       {
+	command <- new StackCommand;
         out_string("Starting loop\n");
 	out_string(">");
 	stack <- new List;
@@ -157,7 +159,14 @@ class Main inherits IO {
 		{
 			out_string(">");
 			input <- in_string();
-			stack.cons(input);
+			if (input = "e") then 
+			{	if (not stack.isNil()) then stack <- command.evaluate(stack)
+				else 0
+				fi;	
+			}
+			else
+				stack.cons(input)
+			fi;
 			out_string(input);
 			out_string("\n");
 		}
